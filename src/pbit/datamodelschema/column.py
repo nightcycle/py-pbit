@@ -74,16 +74,11 @@ class Column():
 			]
 		}
 
-	def set_as_bin(self, target_table_name: str, target_column_name: str, increment: float, bin_name: str | None = None, data_type: DaxType="double"):
-		final_name: str = ""
-		if bin_name:
-			final_name = bin_name
-		else:
-			final_name = target_column_name + "_bin"
-		
+	def set_as_bin(self, target_table_name: str, target_column_name: str, increment: float, bin_name: str, data_type: DaxType="double"):
+
 		reference_data: Any = {
 			"type": "calculated",
-			"name": final_name,
+			"name": bin_name,
 			"dataType": data_type,
 			"isDataTypeInferred": True,
 			"expression": [
@@ -156,20 +151,16 @@ class Column():
 		numerator_column_name: str, 
 		denominator_table_name: str, 
 		denominator_column_name: str,
-		name: None | str = None,
+		name: str,
 		data_type: DaxType="double",
 		summarize_by: SummaryType="sum"
 	): 
-		final_name: str = ""
-		if name:
-			final_name = name
-		else:
-			final_name = numerator_column_name+"_per_"+denominator_column_name
+
 		dax = f"{numerator_table_name}[{numerator_column_name}] / {denominator_table_name}[{denominator_column_name}]"
 		if denominator_table_name != numerator_table_name:
 			dax = f"{numerator_table_name}[{numerator_column_name}] / RELATED({denominator_table_name}[{denominator_column_name}])"
 
-		self.set_dax(dax, final_name, data_type,  summarize_by)
+		self.set_dax(dax, name, data_type,  summarize_by)
 
 	def set_dax(self, dax: str, name: str, data_type: DaxType="double", summarize_by: SummaryType="sum"):
 		ref_data: Any = {

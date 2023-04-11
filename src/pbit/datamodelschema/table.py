@@ -3,7 +3,7 @@ from uuid import uuid4
 from copy import deepcopy
 import pandas as pd
 from .dax import DaxType
-from .column import Column, ColumnData 
+from .column import Column, ColumnData, SummaryType
 from .partition import Partition, PartitionData
 from .measure import Measure, MeasureData
 from .typeholder import AnnotationData
@@ -117,6 +117,13 @@ class Table():
 		self.partitions.append(partition)
 		return partition
 
+	def get_if_column_exists(self, name: str) -> bool:
+		for column in self.columns:
+			# print(name, " =? ", column.name)
+			if column.name == name:
+				return True
+		return False
+
 	def get_column_by_name(self, name: str) -> Column:
 		final_column: Column | None = None
 		# print("column count: ", len(self.columns))
@@ -137,19 +144,53 @@ class Table():
 	) -> Column:
 		if source_column == None and name != "":
 			source_column = name
+
+		assert self.get_if_column_exists(name) == False, f"column with name {name} in table {self.name} already exists!"
+
 		column = Column(name, data_type, source_column)
 		self.columns.append(column)
 		return column
 
-	def new_bin(self, target_column_name: str, increment: float, target_table_name: str | None = None,  bin_name: str | None = None, data_type: DaxType ="double"):
+	def new_bin(self, target_column_name: str, increment: float, target_table_name: str | None = None,  bin_name: str | None = None, data_type: DaxType ="double") -> Column:
 		final_table_name = ""
 		if target_table_name:
 			final_table_name = target_table_name
 		else:
 			final_table_name = self.name
 
-		column = self.new_column("", data_type)
+		column = self.new_column(final_table_name, data_type)
 		column.set_as_bin(final_table_name, target_column_name, increment, bin_name, data_type)
+		return column
+
+	def new_dax_column(self, dax: str, name: str, data_type: DaxType="double", summarize_by: SummaryType="sum") -> Column:
+		column = self.new_column(name, data_type)
+		column.set_dax(dax, name, data_type, summarize_by)
+		return column
+	
+	def new_normalized_column(
+		self,
+		numerator_column_name: str,  
+		denominator_column_name: str,
+		denominator_table_name: None | str = None,
+		name: None | str = None,
+		data_type: DaxType="double",
+		summarize_by: SummaryType="sum"
+	):
+		final_name: str = ""
+		if name:
+			final_name = name
+		else:
+			final_name = numerator_column_name+"_per_"+denominator_column_name
+		
+		final_denominator_table_name: str = ""
+		if denominator_table_name == None:
+			final_denominator_table_name = self.name
+		else:
+			final_denominator_table_name = denominator_table_name
+
+		column = self.new_column(final_name, data_type)
+		column.set_as_normalized(self.name, numerator_column_name, final_denominator_table_name, denominator_column_name, final_name, data_type, summarize_by)
+		return column
 
 	def new_measure(self, name: str) -> Measure:
 		measure = Measure(name, "any")
