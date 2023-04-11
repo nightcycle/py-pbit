@@ -1,8 +1,10 @@
 from typing import TypedDict, Literal, Any
 from uuid import uuid4
 from copy import deepcopy
-from pbit.datamodelschema.dax import DaxType
-from pbit.datamodelschema.typeholder import AnnotationData
+from .dax import DaxType
+from .typeholder import AnnotationData
+
+SummaryType = Literal["sum"]
 
 class ColumnAttributeHierarchyData(TypedDict):
 	state: str
@@ -147,6 +149,52 @@ class Column():
 			]
 		}
 		self.load(reference_data)
+
+	def set_as_normalized(
+		self,
+		numerator_table_name: str, 
+		numerator_column_name: str, 
+		denominator_table_name: str, 
+		denominator_column_name: str,
+		name: None | str = None,
+		data_type: DaxType="double",
+		summarize_by: SummaryType="sum"
+	): 
+		final_name: str = ""
+		if name:
+			final_name = name
+		else:
+			final_name = numerator_column_name+"_per_"+denominator_column_name
+		dax = f"{numerator_table_name}[{numerator_column_name}] / {denominator_table_name}[{denominator_column_name}]"
+		if denominator_table_name != numerator_table_name:
+			dax = f"{numerator_table_name}[{numerator_column_name}] / RELATED({denominator_table_name}[{denominator_column_name}])"
+
+		self.set_dax(dax, final_name, data_type,  summarize_by)
+
+	def set_dax(self, dax: str, name: str, data_type: DaxType="double", summarize_by: SummaryType="sum"):
+		ref_data: Any = {
+            "type": "calculated",
+            "name": name,
+            "dataType": data_type,
+            "isDataTypeInferred": True,
+            "expression": dax,
+            "lineageTag": self.id,
+            "summarizeBy": summarize_by,
+            "attributeHierarchy": {
+              "state": "ready"
+            },
+            "annotations": [
+              {
+                "name": "SummarizationSetBy",
+                "value": "Automatic"
+              },
+              {
+                "name": "PBI_FormatHint",
+                "value": "{\"isGeneralNumber\":true}"
+              }
+            ]
+          }
+		self.load(ref_data)
 
 	def load(self, data: ColumnData):
 		self.reference_data = deepcopy(data)

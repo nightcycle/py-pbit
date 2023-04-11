@@ -4,16 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pbit"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
   { name="nightcycle", email="coyer@nightcycle.us" },
 ]
 dependencies = [
-	"lxml~=4.9.2", 
 	"pandas~=2.0.0",
-	"adal~=1.2.7",
-	"azure-kusto-data~=4.1.3",
-	"typing_extensions~=4.5.0",
 ]
 description = "a package with useful functions for downloading and working with midas generated analytics data"
 readme = "README.md"

@@ -3,9 +3,9 @@ import inspect
 from typing import TypedDict, Literal, Any
 from uuid import uuid4
 from copy import deepcopy
-from pbit.datamodelschema.typeholder import AnnotationData
-from pbit.datamodelschema.relationship import RelationshipData, Relationship
-from pbit.datamodelschema.table import TableData, Table
+from .typeholder import AnnotationData
+from .relationship import RelationshipData, Relationship
+from .table import TableData, Table
 
 class AccessOptionsData(TypedDict):
 	legacyRedirects: bool
@@ -400,7 +400,7 @@ class DataModelSchema():
 			if "queryGroups" in model_data:
 				model_data["queryGroups"] = []
 
-	def reset_model(self):
+	def clear(self):
 		self.clear_tables()
 		self.clear_relationships()
 		self.clear_query_groups()			

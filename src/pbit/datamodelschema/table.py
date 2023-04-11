@@ -2,12 +2,12 @@ from typing import TypedDict, Literal, Any
 from uuid import uuid4
 from copy import deepcopy
 import pandas as pd
-from pbit.datamodelschema.dax import DaxType
-from pbit.datamodelschema.column import Column, ColumnData 
-from pbit.datamodelschema.partition import Partition, PartitionData
-from pbit.datamodelschema.measure import Measure, MeasureData
-from pbit.datamodelschema.typeholder import AnnotationData
-from pbit.datamodelschema.powerquery import MType
+from .dax import DaxType
+from .column import Column, ColumnData 
+from .partition import Partition, PartitionData
+from .measure import Measure, MeasureData
+from .typeholder import AnnotationData
+from .powerquery import MType
 
 class HierarchyLevelData(TypedDict):
 	name: str

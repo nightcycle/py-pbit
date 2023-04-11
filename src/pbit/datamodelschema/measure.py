@@ -2,7 +2,7 @@ from typing import TypedDict, Literal, Any
 from uuid import uuid4
 from copy import deepcopy
 from pandas import DataFrame
-from pbit.datamodelschema.column import DaxType
+from .column import DaxType
 
 class MeasureProperty(TypedDict):
 	property: str

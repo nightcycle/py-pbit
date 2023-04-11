@@ -1,6 +1,6 @@
 from typing import TypedDict, Literal, Any, Callable
 from uuid import uuid4
-from pbit.datamodelschema.column import DaxType
+from .column import DaxType
 import os
 
 PRIOR_PREFIX: str = "~!PRIOR_TABLE_KEY!~"

@@ -1,8 +1,8 @@
 from typing import TypedDict, Literal, Any
 from uuid import uuid4
 from copy import deepcopy
-from pbit.datamodelschema.column import DaxType
-from pbit.datamodelschema.powerquery import PowerQuery, MType, from_dax_type_to_m_type
+from .column import DaxType
+from .powerquery import PowerQuery, MType, from_dax_type_to_m_type
 
 class PartitionSourceData(TypedDict):
 	type: str
