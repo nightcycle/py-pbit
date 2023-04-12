@@ -142,7 +142,7 @@ class Table():
 		data_type: DaxType,
 		source_column: None | str = None
 	) -> Column:
-		if source_column == None and name != "":
+		if source_column != None and name != "":
 			source_column = name
 
 		assert self.get_if_column_exists(name) == False, f"column with name {name} in table {self.name} already exists!"
@@ -153,13 +153,19 @@ class Table():
 
 	def new_bin(self, target_column_name: str, increment: float, target_table_name: str | None = None,  bin_name: str | None = None, data_type: DaxType ="double") -> Column:
 		final_table_name = ""
-		if target_table_name:
+		if type(target_table_name) == str:
 			final_table_name = target_table_name
 		else:
 			final_table_name = self.name
 
+		final_name = ""
+		if type(bin_name) == str:
+			final_name = bin_name
+		else:
+			final_name = target_column_name + "_bin"
+
 		column = self.new_column(final_table_name, data_type)
-		column.set_as_bin(final_table_name, target_column_name, increment, bin_name, data_type)
+		column.set_as_bin(final_table_name, target_column_name, increment, final_name, data_type)
 		return column
 
 	def new_dax_column(self, dax: str, name: str, data_type: DaxType="double", summarize_by: SummaryType="sum") -> Column:
@@ -177,16 +183,16 @@ class Table():
 		summarize_by: SummaryType="sum"
 	):
 		final_name: str = ""
-		if name:
+		if type(name) == str:
 			final_name = name
 		else:
 			final_name = numerator_column_name+"_per_"+denominator_column_name
 		
 		final_denominator_table_name: str = ""
-		if denominator_table_name == None:
-			final_denominator_table_name = self.name
+		if type(denominator_table_name) == str:
+			final_denominator_table_name = denominator_table_name	
 		else:
-			final_denominator_table_name = denominator_table_name
+			final_denominator_table_name = self.name
 
 		column = self.new_column(final_name, data_type)
 		column.set_as_normalized(self.name, numerator_column_name, final_denominator_table_name, denominator_column_name, final_name, data_type, summarize_by)

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pbit"
-version = "0.2.3"
+version = "0.2.6"
 authors = [
   { name="nightcycle", email="coyer@nightcycle.us" },
 ]

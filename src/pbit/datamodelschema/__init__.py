@@ -467,7 +467,7 @@ class DataModelSchema():
 
 		if "relationships" in ref_model_data:
 			rel_list = ref_model_data["relationships"]
-			assert rel_list
+			assert rel_list != None
 			for relationship_data in rel_list:
 				relationship = self.new_relationship("", "", "")
 				relationship.load(relationship_data)
@@ -475,7 +475,7 @@ class DataModelSchema():
 
 		if "tables" in ref_model_data:
 			tab_list = ref_model_data["tables"]
-			assert tab_list
+			assert tab_list != None
 			for i , table_data in enumerate(tab_list):
 				table = self.new_table("")
 				table.load(table_data)
@@ -483,7 +483,7 @@ class DataModelSchema():
 
 		if "queryGroups" in ref_model_data and ref_model_data["queryGroups"] != None:
 			ref_groups = ref_model_data["queryGroups"]
-			assert ref_groups
+			assert ref_groups != None
 			for query_group_data in ref_groups:
 				self.query_groups.append(query_group_data["folder"])
 			ref_model_data["queryGroups"] = None
