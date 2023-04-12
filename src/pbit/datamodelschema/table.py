@@ -207,7 +207,7 @@ class Table():
 		self.id = self.reference_data["lineageTag"]
 
 		for column_data in self.reference_data["columns"]:
-			column = self.new_column("", "any")
+			column = self.new_column(str(uuid4()), "any")
 			column.load(column_data)
 		self.reference_data["columns"] = []
 

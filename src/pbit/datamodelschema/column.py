@@ -14,7 +14,7 @@ class ColumnData(TypedDict):
 	lineageTag: str | None
 	summarizeBy: str | None
 	sourceColumn: str | None
-	name: str
+	name: str | None
 	dataType: str
 	formatString: str | None
 	dataCategory: str | None
@@ -189,7 +189,8 @@ class Column():
 
 	def load(self, data: ColumnData):
 		self.reference_data = deepcopy(data)
-		self.name = self.reference_data["name"]
+		if "name" in self.reference_data:
+			self.name = self.reference_data["name"]
 		self.data_type = self.reference_data["dataType"]
 		if "sourceColumn" in self.reference_data:
 			source_column_ref = self.reference_data["sourceColumn"]
