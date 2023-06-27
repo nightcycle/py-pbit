@@ -48,7 +48,7 @@ class Relationship():
 		}
 
 		if not self.is_both_directions:
-			self.reference_data["crossFilteringBehavior"] = "rememberToAddThisLater"
+			self.reference_data["crossFilteringBehavior"] = "oneDirection"
 		else:
 			self.reference_data["crossFilteringBehavior"] = "bothDirections"
 
@@ -76,7 +76,7 @@ class Relationship():
 		relationship_data["toColumn"] = self.to_column
 
 		if not self.is_both_directions:
-			relationship_data["crossFilteringBehavior"] = "rememberToAddThisLater"
+			relationship_data["crossFilteringBehavior"] = "oneDirection"
 		else:
 			relationship_data["crossFilteringBehavior"] = "bothDirections"
 
